@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bruises / Info</title>
+<title>Bruises / Archive</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 
@@ -11,160 +11,297 @@ nav{
   display:flex;align-items:center;justify-content:space-between;
   padding:0 16px;height:32px;
   border-bottom:1px solid #ddd;
-  position:sticky;top:0;background:#fff;z-index:10;
 }
 .logo{font-size:11px;letter-spacing:.1em;text-transform:uppercase}
-.logo a{text-decoration:none;color:inherit}
 .logo span{color:#999}
 .upload a{
   font-size:10px;color:#898d90;text-decoration:none;
   border:1px solid #898d90;padding:2px 6px;border-radius:4px;
+  cursor:pointer;
+}
+.upload a:hover{background:#f5f5f5}
+
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;}
+
+.cell{
+  text-decoration:none;color:inherit;display:block;
+  position:relative;cursor:pointer;
 }
 
-body{font-family:Georgia,serif;background:#fff;color:#111}
-
-.hero{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  border-bottom:1px solid #ddd;
-}
-.hero img{
-  width:100%;height:60vh;
-  object-fit:cover;display:block;
-  filter:saturate(.85);
-}
-.hero img:first-child{border-right:1px solid #ddd}
-
-.hero-caption{
-  display:grid;grid-template-columns:1fr 1fr;
-  border-bottom:1px solid #ddd;
-}
-.hero-caption span{
-  font-size:9px;font-family:sans-serif;
-  letter-spacing:.08em;color:#999;
-  padding:7px 12px;
-}
-.hero-caption span:first-child{border-right:1px solid #ddd}
-
-.text{
-  max-width:560px;
-  margin:0 auto;
-  padding:56px 24px 52px;
-}
-.text p{
-  font-size:14px;line-height:1.9;color:#222;
-  margin-bottom:20px;
-}
-.text p:last-child{margin-bottom:0}
-
-.carousel-wrap{
-  border-top:1px solid #ddd;
-  padding:24px 0 32px;
-}
-.carousel-label{
-  font-size:9px;letter-spacing:.12em;text-transform:uppercase;
-  color:#999;font-family:sans-serif;
-  padding:0 16px;margin-bottom:14px;
-}
-.carousel{
-  display:flex;
-  overflow-x:auto;
-  gap:7px;
-  padding:0 16px;
-  scroll-snap-type:x mandatory;
-  -webkit-overflow-scrolling:touch;
-}
-.carousel::-webkit-scrollbar{display:none}
-.carousel-item{
-  flex:0 0 auto;
-  width:260px;height:auto;
-  scroll-snap-align:start;
+.cell-img{
+  width:100%;aspect-ratio:1;
   overflow:hidden;
+}
+.cell-img img{
+  width:100%;
+  height:100%;
+  filter: blur(10px);
+}
+.cell-img:hover img {
+  filter: blur(0);
+}
+
+
+.cell-num{
+  position:absolute;bottom:6px;left:8px;
+  font-size:9px;
+  color:#fff;
+  letter-spacing:.08em;
+  mix-blend-mode:difference;
+}
+
+.ov{
+  display:none;position:fixed;inset:0;z-index:100;
+  align-items:center;justify-content:center;
+}
+.ov.open{display:flex}
+
+.ov-bg{
+  position:absolute;inset:0;
+  background:rgba(255,255,255,0.72);
+  cursor:pointer;
+}
+
+.panel{
+  position:relative;z-index:1;
+  background:#fff;display:grid;grid-template-columns:1fr 1fr;
+  max-width:580px;width:92%;
+  max-height:90vh;overflow:hidden;
+}
+
+.p-img{
+  background:#111;display:flex;align-items:center;
+  justify-content:center;min-height:280px;overflow:hidden;
+}
+.p-img img{width:100%;height:100%;object-fit:cover}
+
+.p-info{
+  padding:20px 18px;overflow-y:auto;
+  display:flex;flex-direction:column;gap:14px;position:relative;
+}
+
+.p-close{
+  position:absolute;top:10px;right:12px;
+  font-size:18px;color:#aaa;line-height:1;
+  background:none;border:none;cursor:pointer;
+}
+
+.p-id{font-size:9px;letter-spacing:.12em;color:#999;text-transform:uppercase}
+.kv{display:flex;flex-direction:column;gap:2px}
+.k{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#999}
+.v{font-size:11px}
+.note{font-size:10px;color:#888;line-height:1.6;font-style:italic}
+
+.uov{
+  display:none;position:fixed;inset:0;z-index:200;
+  align-items:center;justify-content:center;
+}
+.uov.open{display:flex}
+
+.uov-bg{
+  position:absolute;inset:0;
+  background:rgba(255,255,255,0.72);
+  backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+  cursor:pointer;
+}
+
+.upanel{
+  position:relative;z-index:1;
+  background:#fff;max-width:360px;width:92%;
   border:1px solid #ddd;
 }
-.carousel-item img{
-  width:100%;height:auto;
-  object-fit:unset;
-}
 
-.resources{
-  border-top:1px solid #ddd;
-  padding:24px 16px 64px;
+.upanel-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;border-bottom:1px solid #ddd;
 }
-.resources .label{
-  font-size:9px;letter-spacing:.12em;text-transform:uppercase;
-  color:#999;font-family:sans-serif;margin-bottom:16px;
+.upanel-head span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#555}
+
+.upanel-body{padding:14px;display:flex;flex-direction:column;gap:10px}
+
+.drop-zone{
+  border:1px dashed #ccc;aspect-ratio:4/3;max-height:180px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  cursor:pointer;position:relative;overflow:hidden;
 }
-.res-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:1px;background:#ddd;border:1px solid #ddd;
-  max-width:640px;
+.drop-zone:hover{background:#fafafa}
+.drop-zone.has-img{border-style:solid;border-color:#bbb}
+.drop-zone img.preview{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;font-size:0}
+.drop-lbl{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#aaa;position:relative;z-index:1}
+
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.field{display:flex;flex-direction:column;gap:3px}
+.field label{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#999}
+.field input{font-size:11px;padding:4px 6px;border:1px solid #ddd;color:#333;width:100%;outline:none;}
+.field input:focus{border-color:#aaa}
+
+.sub-btn{
+  font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  padding:6px;border:1px solid #999;background:none;cursor:pointer;color:#555;width:100%;
 }
-.res-item{background:#fff;padding:14px 12px}
-.res-item .name{font-size:11px;font-family:sans-serif;color:#111;margin-bottom:4px}
-.res-item .desc{font-size:10px;font-family:sans-serif;color:#999;line-height:1.5;margin-bottom:7px}
-.res-item a{
-  font-size:10px;font-family:sans-serif;color:#555;text-decoration:none;
-  border-bottom:1px solid #ddd;padding-bottom:1px;display:inline-block;margin-top:2px;
-}
-.res-item a:hover{color:#111}
+.sub-btn:hover{background:#f5f5f5}
+.sub-btn:disabled{opacity:.4;cursor:not-allowed}
+.u-status{font-size:10px;color:#999;text-align:center;min-height:13px}
 </style>
 </head>
 <body>
 
 <nav>
   <div class="logo"><a href="info.html">Bruises</a> / <span><a href="index.html">Archive</a></span></div>
-  <div></div>
-  <div class="upload"><a href="index.html">Upload</a></div>
+  <div class="count" id="countEl"></div>
+  <div class="upload"><a onclick="openUpload();return false;" href="#">Upload</a></div>
 </nav>
 
-<div class="hero">
-  <img src="images/nan.jpg" alt="Nan Goldin, Nan One Month After Being Battered, 1984">
-  <img src="images/heart.jpeg" alt="Heart-shaped bruise, thigh">
-</div>
-<div class="hero-caption">
-  <span>Nan Goldin — Nan One Month After Being Battered, 1984</span>
-  <span>Heart-shaped bruise, thigh</span>
-</div>
+<div class="grid" id="grid"></div>
 
-<div class="text">
-  <p>A bruise is a record. The body keeps evidence of contact — of force, of accident, of care gone wrong. Unlike a cut, it doesn't break the surface. It stays under the skin, pooling color through yellow, purple, green, brown, before it disappears.</p>
-  <p>Nan Goldin understood this. In 1984, one month after being beaten by her boyfriend, she photographed herself: red lipstick, pearl necklace, two black eyes. The image became one of the most important photographs of the twentieth century — not because it is shocking, but because it refuses to look away. It insists on being seen.</p>
-  <p>This archive collects bruises without hierarchy. Sport, accident, medical procedure, unknown cause. The body as site of ordinary life. What happened here? How many days ago? The colors tell time.</p>
-</div>
-
-<div class="carousel-wrap">
-  <div class="carousel-label">Related</div>
-  <div class="carousel">
-    <div class="carousel-item"><img src="images/potato.webp" alt="Potato Grows Like a Bruised Heart"></div>
-    <div class="carousel-item"><img src="images/progression.jpg" alt="progression"></div>
-    <div class="carousel-item"><img src="images/angel.jpg" alt="angel"></div>
-    <!-- add more carousel-item divs here as the collection grows -->
-  </div>
-</div>
-
-<div class="resources">
-  <div class="label">Support &amp; resources</div>
-  <div class="res-grid">
-    <div class="res-item">
-      <div class="name">National DV Hotline</div>
-      <div class="desc">24/7 confidential support for domestic violence.</div>
-      <a href="https://www.thehotline.org" target="_blank">thehotline.org</a><br>
-      <a href="tel:18007997233">1-800-799-7233</a>
-    </div>
-    <div class="res-item">
-      <div class="name">Crisis Text Line</div>
-      <div class="desc">Text HOME to 741741. Free and confidential.</div>
-      <a href="https://www.crisistextline.org" target="_blank">crisistextline.org</a>
-    </div>
-    <div class="res-item">
-      <div class="name">RAINN</div>
-      <div class="desc">Support for survivors of sexual violence.</div>
-      <a href="https://www.rainn.org" target="_blank">rainn.org</a><br>
-      <a href="tel:18006564673">1-800-656-4673</a>
+<div class="ov" id="detailOv">
+  <div class="ov-bg" onclick="closeDetail()"></div>
+  <div class="panel">
+    <div class="p-img" id="detailImg"></div>
+    <div class="p-info">
+      <button class="p-close" onclick="closeDetail()">×</button>
+      <div class="p-id" id="detailId"></div>
+      <div class="kv"><div class="k">Stage</div><div class="v" id="detailStage"></div></div>
+      <div class="kv"><div class="k">Region</div><div class="v" id="detailRegion"></div></div>
+      <div class="kv"><div class="k">Cause</div><div class="v" id="detailCause"></div></div>
+      <div class="kv"><div class="k">Size</div><div class="v" id="detailSize"></div></div>
+      <div class="note" id="detailNote"></div>
     </div>
   </div>
 </div>
+
+<div class="uov" id="uploadOv">
+  <div class="uov-bg" onclick="closeUpload()"></div>
+  <div class="upanel">
+    <div class="upanel-head">
+      <span>Submit a bruise</span>
+      <button class="p-close" style="position:static" onclick="closeUpload()">×</button>
+    </div>
+    <div class="upanel-body">
+      <div class="drop-zone" id="dropZone">
+        <input type="file" id="fileInput" accept="image/*" onchange="handleFile(this)">
+        <span class="drop-lbl">Tap to select image</span>
+      </div>
+      <div class="frow">
+        <div class="field"><label>Region</label><input type="text" id="inRegion" placeholder="e.g. forearm"></div>
+        <div class="field"><label>Cause</label><input type="text" id="inCause" placeholder="e.g. unknown"></div>
+      </div>
+      <div class="frow">
+        <div class="field"><label>Size (cm)</label><input type="text" id="inSize" placeholder="e.g. 4×3 cm"></div>
+        <div class="field"><label>Day</label><input type="number" id="inDay" placeholder="days old" min="1"></div>
+      </div>
+      <button class="sub-btn" id="submitBtn" onclick="submitBruise()">Submit to archive</button>
+      <div class="u-status" id="uStatus"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const D = [
+  {id:'01',day:4,region:'Right above the knee',cause:'Sport',size:'6×4 cm',img:'images/bruise1.jpg'},
+  {id:'02',day:2,region:'Forearm',cause:'Medical',size:'3×3 cm',img:'images/bruise2.jpg'},
+  {id:'03',day:7,region:'Thigh',cause:'Fell off a bike',size:'11×8 cm',img:'images/bruise3.jpg'},
+  {id:'04',day:3,region:'Back of hand',cause:'Unknown',size:'1×1 cm',img:'images/bruise4.jpg'},
+  {id:'05',day:1,region:'Leg',cause:'Accident',size:'7×5 cm',img:'images/bruise5.jpg'},
+  {id:'06',day:12,region:'Wrist',cause:'Unknown',size:'8×3 cm',img:'images/bruise6.jpg'},
+  {id:'07',title:'Forearm, bumped into table',day:6,region:'Thigh',cause:'Unknown',size:'14×9 cm',img:'images/bruise7.jpg'},
+  {id:'08',title:'Knuckle, a fight',day:2,region:'Hand',cause:'Sport',size:'2×2 cm', img: 'images/bruise8.jpg'},
+  {id:'09',title:'Arm, vaccine',day:3,region:'Shoulder',cause:'Medical',size:'3×3 cm', img: 'images/bruise9.jpg'},
+  {id:'10',title:'Ankle, sprain',day:8,region:'Foot',cause:'Accident',size:'9×6 cm', img: 'images/bruise10.jpg'},
+  {id:'11',title:'Ribcage, unknown',day:5,region:'Ribcage',cause:'Sport',size:'16×4 cm', img: 'images/bruise11.jpg'}
+];
+
+let userEntries = [];
+try { userEntries = JSON.parse(localStorage.getItem('bruise-entries') || '[]'); } catch(e) {}
+const all = [...D, ...userEntries];
+
+function stage(day) {
+  if (day <= 3) return 'Fresh · 1–3d';
+  if (day <= 7) return 'Peak · 3–7d';
+  if (day <= 14) return 'Late · 7–14d';
+  return 'Resolved · 14d+';
+}
+
+function render() {
+  document.getElementById('grid').innerHTML = all.map((d, i) => {
+    const imgEl = d.img ? `<img src="${d.img}" alt="">` : (d.imgData ? `<img src="${d.imgData}" alt="">` : '');
+    return `<div class="cell" onclick="openDetail(${i})">
+      <div class="cell-img">${imgEl}</div>
+      <div class="cell-num">${d.id}</div>
+    </div>`;
+  }).join('');
+}
+
+function openDetail(i) {
+  const d = all[i];
+  const imgEl = d.img ? `<img src="${d.img}" alt="">` : (d.imgData ? `<img src="${d.imgData}" alt="">` : '');
+  document.getElementById('detailImg').innerHTML = imgEl;
+  document.getElementById('detailId').textContent = d.id;
+  document.getElementById('detailStage').textContent = stage(d.day || 1);
+  document.getElementById('detailRegion').textContent = d.region || '—';
+  document.getElementById('detailCause').textContent = d.cause || '—';
+  document.getElementById('detailSize').textContent = d.size || '—';
+  document.getElementById('detailNote').textContent = d.note || '';
+  document.getElementById('detailOv').classList.add('open');
+}
+function closeDetail() { document.getElementById('detailOv').classList.remove('open'); }
+
+let pendingImg = null;
+
+function openUpload() { document.getElementById('uploadOv').classList.add('open'); }
+function closeUpload() {
+  document.getElementById('uploadOv').classList.remove('open');
+  document.getElementById('uStatus').textContent = '';
+  pendingImg = null;
+  const dz = document.getElementById('dropZone');
+  const prev = dz.querySelector('img.preview');
+  if (prev) prev.remove();
+  dz.classList.remove('has-img');
+  ['inRegion','inCause','inSize','inDay'].forEach(id => document.getElementById(id).value = '');
+}
+
+function handleFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    pendingImg = e.target.result;
+    const dz = document.getElementById('dropZone');
+    let img = dz.querySelector('img.preview');
+    if (!img) { img = document.createElement('img'); img.className = 'preview'; dz.appendChild(img); }
+    img.src = pendingImg;
+    dz.classList.add('has-img');
+  };
+  reader.readAsDataURL(file);
+}
+
+function submitBruise() {
+  const region = document.getElementById('inRegion').value.trim();
+  const cause  = document.getElementById('inCause').value.trim();
+  const size   = document.getElementById('inSize').value.trim();
+  const day    = parseInt(document.getElementById('inDay').value) || 1;
+  const btn    = document.getElementById('submitBtn');
+  const status = document.getElementById('uStatus');
+
+  if (!region) { status.textContent = 'Region required.'; return; }
+
+  const newId = String(all.length + 1).padStart(2, '0');
+  const entry = { id: newId, day, region, cause: cause || 'Unknown', size: size || '—', imgData: pendingImg || null };
+
+  userEntries.push(entry);
+  all.push(entry);
+  try { localStorage.setItem('bruise-entries', JSON.stringify(userEntries)); } catch(e) {}
+
+  render();
+  status.textContent = 'Added as #' + newId + '.';
+  btn.disabled = true;
+  setTimeout(() => { btn.disabled = false; closeUpload(); }, 1000);
+}
+
+render();
+</script>
 
 </body>
 </html>
