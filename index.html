@@ -4,153 +4,341 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bruises / Archive</title>
+<link rel="stylesheet" href="https://use.typekit.net/onv4mfe.css"> 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-
-nav{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 16px;height:32px;
-  border-bottom:1px solid #ddd;
-}
-.logo{font-size:11px;letter-spacing:.1em;text-transform:uppercase}
-.logo span{color:#999}
-.upload a{
-  font-size:10px;color:#898d90;text-decoration:none;
-  border:1px solid #898d90;padding:2px 6px;border-radius:4px;
-  cursor:pointer;
-}
-.upload a:hover{background:#f5f5f5}
-
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;}
-
-.cell{
-  text-decoration:none;color:inherit;display:block;
-  position:relative;cursor:pointer;
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
-.cell-img{
-  width:100%;aspect-ratio:1;
-  overflow:hidden;
-}
-.cell-img img{
-  width:100%;
-  height:100%;
-  filter: blur(10px);
-}
-.cell-img:hover img {
-  filter: blur(0);
-}
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      height: 42px;
+      border-bottom: 1px solid #ddd;
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 10;
+    }
 
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 0
+    }
 
-.cell-num{
-  position:absolute;bottom:6px;left:8px;
-  font-size:9px;
-  color:#fff;
-  letter-spacing:.08em;
-  mix-blend-mode:difference;
-}
+    .nav-link {
+      font-size: 15px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      font-family: "forma-djr-banner";
+      font-weight: 400;
+      font-style: normal;
+      text-decoration: none;
+      color: #111;
+      padding: 0 8px 0 0;
+      transition: color .15s;
+    }
+    .nav-link:first-child { padding-left: 0 }
 
-.ov{
-  display:none;position:fixed;inset:0;z-index:100;
-  align-items:center;justify-content:center;
-}
-.ov.open{display:flex}
+    .nav-sep {
+      font-size: 17px;
+      margin-right: 10px;
+      color: #ccc;
+      font-family: "forma-djr-banner";
+      user-select: none;
+    }
 
-.ov-bg{
-  position:absolute;inset:0;
-  background:rgba(255,255,255,0.72);
-  cursor:pointer;
-}
+    .nav-link.active { color: #111 }
+    .nav-link.inactive { color: #999 }
+    .nav-link.inactive:hover { color: #111 }
 
-.panel{
-  position:relative;z-index:1;
-  background:#fff;display:grid;grid-template-columns:1fr 1fr;
-  max-width:580px;width:92%;
-  max-height:90vh;overflow:hidden;
-}
+    .upload a {
+      font-size: 13px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      font-family: "forma-djr-banner";
+      color: #898d90;
+      text-decoration: none;
+      border: 1px solid #aeaeae;
+      padding: 4px;
+      padding-left: 6px;
+      transition: color .15s, border-color .15s, background .15s;
+    }
 
-.p-img{
-  background:#111;display:flex;align-items:center;
-  justify-content:center;min-height:280px;overflow:hidden;
-}
-.p-img img{width:100%;height:100%;object-fit:cover}
+    .upload a:hover {
+      color: #111;
+      border-color: #111;
+      background: #f5f5f5
+    }
 
-.p-info{
-  padding:20px 18px;overflow-y:auto;
-  display:flex;flex-direction:column;gap:14px;position:relative;
-}
+    body {
+      background: #fff;
+      color: #111;
+      overflow-x: hidden
+    }
 
-.p-close{
-  position:absolute;top:10px;right:12px;
-  font-size:18px;color:#aaa;line-height:1;
-  background:none;border:none;cursor:pointer;
-}
+    /* ── GRID ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+    }
 
-.p-id{font-size:9px;letter-spacing:.12em;color:#999;text-transform:uppercase}
-.kv{display:flex;flex-direction:column;gap:2px}
-.k{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#999}
-.v{font-size:11px}
-.note{font-size:10px;color:#888;line-height:1.6;font-style:italic}
+    .cell {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      position: relative;
+      cursor: pointer;
+    }
 
-.uov{
-  display:none;position:fixed;inset:0;z-index:200;
-  align-items:center;justify-content:center;
-}
-.uov.open{display:flex}
+    .cell-img {
+      width: 100%;
+      aspect-ratio: 1;
+      overflow: hidden;
+      position: relative;
+    }
 
-.uov-bg{
-  position:absolute;inset:0;
-  background:rgba(255,255,255,0.72);
-  backdrop-filter:blur(2px);
-  -webkit-backdrop-filter:blur(2px);
-  cursor:pointer;
-}
+    .cell-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: blur(10px);
+      transform: scale(1.04);
+      transition: filter .3s ease, transform .3s ease;
+    }
 
-.upanel{
-  position:relative;z-index:1;
-  background:#fff;max-width:360px;width:92%;
-  border:1px solid #ddd;
-}
+    .cell-img:hover img {
+      filter: blur(0);
+      transform: scale(1);
+    }
 
-.upanel-head{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:10px 14px;border-bottom:1px solid #ddd;
-}
-.upanel-head span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#555}
+    /* ── DETAIL OVERLAY ── */
+    .ov {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+    .ov.open { display: flex }
 
-.upanel-body{padding:14px;display:flex;flex-direction:column;gap:10px}
+    .ov-bg {
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.72);
+      cursor: pointer;
+    }
 
-.drop-zone{
-  border:1px dashed #ccc;aspect-ratio:4/3;max-height:180px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
-  cursor:pointer;position:relative;overflow:hidden;
-}
-.drop-zone:hover{background:#fafafa}
-.drop-zone.has-img{border-style:solid;border-color:#bbb}
-.drop-zone img.preview{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;font-size:0}
-.drop-lbl{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#aaa;position:relative;z-index:1}
+    .panel {
+      position: relative;
+      z-index: 1;
+      background: #fff;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      max-width: 580px;
+      width: 92%;
+      max-height: 90vh;
+      overflow: hidden;
+      border: 1px solid #ddd;
+    }
 
-.frow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.field{display:flex;flex-direction:column;gap:3px}
-.field label{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#999}
-.field input{font-size:11px;padding:4px 6px;border:1px solid #ddd;color:#333;width:100%;outline:none;}
-.field input:focus{border-color:#aaa}
+    .p-img {
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 280px;
+      overflow: hidden;
+    }
+    .p-img img { width: 100%; height: 100%; object-fit: cover }
 
-.sub-btn{
-  font-size:10px;letter-spacing:.08em;text-transform:uppercase;
-  padding:6px;border:1px solid #999;background:none;cursor:pointer;color:#555;width:100%;
-}
-.sub-btn:hover{background:#f5f5f5}
-.sub-btn:disabled{opacity:.4;cursor:not-allowed}
-.u-status{font-size:10px;color:#999;text-align:center;min-height:13px}
+    .p-info {
+      padding: 20px 18px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+    }
+
+    .p-close {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-size: 18px;
+      color: #aaa;
+      line-height: 1;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: "forma-djr-banner";
+      transition: color .15s;
+    }
+    .p-close:hover { color: #111 }
+
+    .kv { display: flex; flex-direction: column; gap: 2px }
+
+    .k {
+      font-size: 9px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #999;
+      font-family: "forma-djr-banner";
+    }
+
+    .v {
+      font-size: 11px;
+      font-family: "ff-speak-web", sans-serif;
+    }
+
+    .note {
+      font-size: 10px;
+      color: #888;
+      line-height: 1.6;
+      font-style: italic;
+      font-family: "ff-speak-web", sans-serif;
+    }
+
+    /* ── UPLOAD OVERLAY ── */
+    .uov {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    .uov.open { display: flex }
+
+    .uov-bg {
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      cursor: pointer;
+    }
+
+    .upanel {
+      position: relative;
+      z-index: 1;
+      background: #fff;
+      max-width: 360px;
+      width: 92%;
+      border: 1px solid #ddd;
+    }
+
+    .upanel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .upanel-head span {
+      font-size: 10px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #555;
+      font-family: "forma-djr-banner";
+    }
+
+    .upanel-body { padding: 14px; display: flex; flex-direction: column; gap: 10px }
+
+    .drop-zone {
+      border: 1px dashed #ccc;
+      aspect-ratio: 4/3;
+      max-height: 180px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: background .15s;
+    }
+    .drop-zone:hover { background: #fafafa }
+    .drop-zone.has-img { border-style: solid; border-color: #bbb }
+    .drop-zone img.preview { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover }
+    .drop-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; font-size: 0 }
+
+    .drop-lbl {
+      font-size: 9px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #aaa;
+      position: relative;
+      z-index: 1;
+      font-family: "forma-djr-banner";
+    }
+
+    .frow { display: grid; grid-template-columns: 1fr 1fr; gap: 8px }
+    .field { display: flex; flex-direction: column; gap: 3px }
+
+    .field label {
+      font-size: 9px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #999;
+      font-family: "forma-djr-banner";
+    }
+
+    .field input {
+      font-size: 11px;
+      padding: 4px 6px;
+      border: 1px solid #ddd;
+      color: #333;
+      width: 100%;
+      outline: none;
+      font-family: "ff-speak-web", sans-serif;
+      transition: border-color .15s;
+    }
+    .field input:focus { border-color: #aaa }
+
+    .sub-btn {
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 6px;
+      border: 1px solid #999;
+      background: none;
+      cursor: pointer;
+      color: #555;
+      width: 100%;
+      font-family: "forma-djr-banner";
+      transition: background .15s, color .15s, border-color .15s;
+    }
+    .sub-btn:hover { background: #f5f5f5; color: #111; border-color: #111 }
+    .sub-btn:disabled { opacity: .4; cursor: not-allowed }
+
+    .u-status {
+      font-size: 10px;
+      color: #999;
+      text-align: center;
+      min-height: 13px;
+      font-family: "ff-speak-web", sans-serif;
+    }
 </style>
 </head>
 <body>
 
 <nav>
-  <div class="logo"><a href="info.html">Bruises</a> / <span><a href="index.html">Archive</a></span></div>
-  <div class="count" id="countEl"></div>
+  <div class="nav-left">
+    <a class="nav-link inactive" href="info.html">Bruises</a>
+    <span class="nav-sep">/</span>
+    <a class="nav-link active" href="index.html">Archive</a>
+  </div>
   <div class="upload"><a onclick="openUpload();return false;" href="#">Upload</a></div>
 </nav>
 
@@ -162,8 +350,6 @@ nav{
     <div class="p-img" id="detailImg"></div>
     <div class="p-info">
       <button class="p-close" onclick="closeDetail()">×</button>
-      <div class="p-id" id="detailId"></div>
-      <div class="kv"><div class="k">Stage</div><div class="v" id="detailStage"></div></div>
       <div class="kv"><div class="k">Region</div><div class="v" id="detailRegion"></div></div>
       <div class="kv"><div class="k">Cause</div><div class="v" id="detailCause"></div></div>
       <div class="kv"><div class="k">Size</div><div class="v" id="detailSize"></div></div>
@@ -206,30 +392,22 @@ const D = [
   {id:'04',day:3,region:'Back of hand',cause:'Unknown',size:'1×1 cm',img:'images/bruise4.jpg'},
   {id:'05',day:1,region:'Leg',cause:'Accident',size:'7×5 cm',img:'images/bruise5.jpg'},
   {id:'06',day:12,region:'Wrist',cause:'Unknown',size:'8×3 cm',img:'images/bruise6.jpg'},
-  {id:'07',title:'Forearm, bumped into table',day:6,region:'Thigh',cause:'Unknown',size:'14×9 cm',img:'images/bruise7.jpg'},
-  {id:'08',title:'Knuckle, a fight',day:2,region:'Hand',cause:'Sport',size:'2×2 cm', img: 'images/bruise8.jpg'},
-  {id:'09',title:'Arm, vaccine',day:3,region:'Shoulder',cause:'Medical',size:'3×3 cm', img: 'images/bruise9.jpg'},
-  {id:'10',title:'Ankle, sprain',day:8,region:'Foot',cause:'Accident',size:'9×6 cm', img: 'images/bruise10.jpg'},
-  {id:'11',title:'Ribcage, unknown',day:5,region:'Ribcage',cause:'Sport',size:'16×4 cm', img: 'images/bruise11.jpg'}
+  {id:'07',day:6,region:'Thigh',cause:'Unknown',size:'14×9 cm',img:'images/bruise7.jpg'},
+  {id:'08',day:2,region:'Hand',cause:'Sport',size:'2×2 cm',img:'images/bruise8.jpg'},
+  {id:'09',day:3,region:'Shoulder',cause:'Medical',size:'3×3 cm',img:'images/bruise9.jpeg'},
+  {id:'10',day:8,region:'Foot',cause:'Accident',size:'9×6 cm',img:'images/bruise10.jpeg'},
+  {id:'11',day:5,region:'Ribcage',cause:'Sport',size:'16×4 cm',img:'images/bruise11.jpg'}
 ];
 
 let userEntries = [];
 try { userEntries = JSON.parse(localStorage.getItem('bruise-entries') || '[]'); } catch(e) {}
 const all = [...D, ...userEntries];
 
-function stage(day) {
-  if (day <= 3) return 'Fresh · 1–3d';
-  if (day <= 7) return 'Peak · 3–7d';
-  if (day <= 14) return 'Late · 7–14d';
-  return 'Resolved · 14d+';
-}
-
 function render() {
   document.getElementById('grid').innerHTML = all.map((d, i) => {
     const imgEl = d.img ? `<img src="${d.img}" alt="">` : (d.imgData ? `<img src="${d.imgData}" alt="">` : '');
     return `<div class="cell" onclick="openDetail(${i})">
       <div class="cell-img">${imgEl}</div>
-      <div class="cell-num">${d.id}</div>
     </div>`;
   }).join('');
 }
@@ -238,8 +416,6 @@ function openDetail(i) {
   const d = all[i];
   const imgEl = d.img ? `<img src="${d.img}" alt="">` : (d.imgData ? `<img src="${d.imgData}" alt="">` : '');
   document.getElementById('detailImg').innerHTML = imgEl;
-  document.getElementById('detailId').textContent = d.id;
-  document.getElementById('detailStage').textContent = stage(d.day || 1);
   document.getElementById('detailRegion').textContent = d.region || '—';
   document.getElementById('detailCause').textContent = d.cause || '—';
   document.getElementById('detailSize').textContent = d.size || '—';
@@ -295,7 +471,7 @@ function submitBruise() {
   try { localStorage.setItem('bruise-entries', JSON.stringify(userEntries)); } catch(e) {}
 
   render();
-  status.textContent = 'Added as #' + newId + '.';
+  status.textContent = 'Added to archive.';
   btn.disabled = true;
   setTimeout(() => { btn.disabled = false; closeUpload(); }, 1000);
 }
